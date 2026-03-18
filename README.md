@@ -7,7 +7,7 @@ Ubuntu 24.04 (Noble Numbat) Docker container for Ansible playbook and role testi
 This container is based on `ubuntu:24.04` and includes:
 
 - **systemd** – enables testing of services that rely on systemd init
-- **Ansible** – installed via pip for running playbooks and roles
+- **Ansible** – installed via [uv](https://github.com/astral-sh/uv) for running playbooks and roles
 - Supporting libraries: `python3`, `libffi-dev`, `libssl-dev`, `libyaml-dev`, and more
 
 It is intended to be used as a target container for Molecule-based Ansible role testing.

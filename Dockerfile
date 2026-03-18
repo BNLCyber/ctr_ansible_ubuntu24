@@ -3,7 +3,10 @@ LABEL maintainer="BNLCyber"
 
 ARG DEBIAN_FRONTEND=noninteractive
 
-ENV pip_packages="ansible"
+ENV uv_packages="ansible"
+
+# Install uv from the official image.
+COPY --from=ghcr.io/astral-sh/uv:latest /uv /bin/uv
 
 # Install dependencies.
 RUN apt-get update \
@@ -16,7 +19,6 @@ RUN apt-get update \
        libyaml-dev \
        python3-dev \
        python3-setuptools \
-       python3-pip \
        python3-yaml \
        software-properties-common \
        rsyslog systemd systemd-cron sudo iproute2 \
@@ -29,8 +31,8 @@ RUN sed -i 's/^\($ModLoad imklog\)/#\1/' /etc/rsyslog.conf
 # Fix potential UTF-8 errors with ansible-test.
 RUN locale-gen en_US.UTF-8
 
-# Install Ansible via pip (use --break-system-packages for Ubuntu 24.04 PEP 668).
-RUN pip3 install --break-system-packages $pip_packages
+# Install Ansible via uv.
+RUN uv pip install --system --break-system-packages $uv_packages
 
 COPY initctl_faker .
 RUN chmod +x initctl_faker && rm -f /sbin/initctl && ln -s /initctl_faker /sbin/initctl
